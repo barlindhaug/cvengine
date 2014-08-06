@@ -10,5 +10,4 @@ pom.xml.asc
 .idea
 *.iml
 
-techs.json
 token

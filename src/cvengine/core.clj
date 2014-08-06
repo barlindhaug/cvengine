@@ -23,7 +23,9 @@
   (mapcat (fn [category] (:tags category)) (:technologies cv)))
 
 (defn find-similar [technologies]
-  (map #(str/replace-first % #"(?i)java.*" "Java") technologies))
+  (->>
+    (map #(str/replace-first % #"(?i)java.*" "Java") technologies)
+    (map #(str/replace-first % #"(?i)html.*" "HTML"))))
 
 (defn filter-technologies [technologies]
   (distinct (find-similar technologies)))
