@@ -6,4 +6,6 @@
        (fact "java 7 and java SE should be Java"
              (find-similar ["clojure" "Java" "Java 7" "Java SE"]) => ["clojure" "Java" "Java" "Java"])
        (fact "javascript should not be replaced by Java"
-             (find-similar ["javascript"]) => ["javascript"]))
+             (find-similar ["JavaScript"]) => ["JavaScript"])
+       (fact "javascript should be spelled JavaScript"
+             (find-similar ["javascript"]) => ["JavaScript"]))

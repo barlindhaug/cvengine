@@ -25,6 +25,7 @@
 (defn find-similar [technologies]
   (->>
     (map #(str/replace-first % #"(?i)java\s.*" "Java") technologies)
+    (map #(str/replace-first % #"(?i)javascript" "JavaScript"))
     (map #(str/replace-first % #"(?i)html.*" "HTML"))))
 
 (defn filter-technologies [technologies]
