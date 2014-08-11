@@ -62,7 +62,7 @@
 (defn go-last-project []
   (->>
     (get-cv-urls)
-    (mapcat #(get-tech-from-last-project %))
+    (mapcat #(filter-technologies (get-tech-from-last-project %)))
     (format-and-spit "current-tech.json")))
 
 
