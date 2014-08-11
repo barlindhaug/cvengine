@@ -30,23 +30,39 @@
 (defn filter-technologies [technologies]
   (distinct (find-similar technologies)))
 
-(defn output [map]
-  (spit "techs.json" (json/write-str {:name "Tech" :children map})))
+(defn output [filename map]
+  (spit filename (json/write-str {:name "Tech" :children map})))
 
 (defn get-tech-from-cv [url]
   (->
     (get-file url)
     (extract-technologies)))
 
+(defn get-tech-from-last-project [url]
+  (->>
+    (get-file url)
+    (:project_experiences)
+    (sort-by :order)
+    (first)
+    (:local_tags)))
+
+(defn format-and-spit [filename keywords-vector]
+  (->>
+    (sort keywords-vector)
+    (frequencies)
+    (map (fn [tech] {:name (first tech) :size (second tech)}))
+    (output filename)))
+
 (defn go []
   (->>
     (get-cv-urls)
     (mapcat #(filter-technologies (get-tech-from-cv %)))
-    (sort)
-    (frequencies)
-    (map (fn [tech] {:name (first tech) :size (second tech)}))
-    (output)))
+    (format-and-spit "techs.json")))
 
-
+(defn go-last-project []
+  (->>
+    (get-cv-urls)
+    (mapcat #(get-tech-from-last-project %))
+    (format-and-spit "current-tech.json")))
 
 

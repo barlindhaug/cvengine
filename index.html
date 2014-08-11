@@ -31,7 +31,18 @@ var svg = d3.select("body").append("svg")
     .attr("height", diameter)
     .attr("class", "bubble");
 
-d3.json("techs.json", function(error, root) {
+var file = "techs.json";
+
+if (window.location.search) {
+  file = window.location.search.replace("?f=", "");
+}
+
+minimumSize = {
+    "techs.json": 5,
+    "current-tech.json": 1
+};
+
+d3.json(file, function(error, root) {
   var node = svg.selectAll(".node")
       .data(bubble.nodes(classes(root))
       .filter(function(d) { return !d.children; }))
@@ -60,7 +71,7 @@ function classes(root) {
     if (node.children) {
       node.children.forEach(function(child) { recurse(node.name, child); });
     } else {
-      if (node.size > 5) {
+      if (node.size > minimumSize[file]) {
         classes.push({packageName: name, className: node.name, value: node.size});
       }
     }
